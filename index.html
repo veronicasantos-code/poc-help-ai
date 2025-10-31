@@ -9,11 +9,8 @@
   <script type="module">
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-    // 🔑 Substitua pela sua API Key (restrita ao domínio github.io)
     const genAI = new GoogleGenerativeAI("AIzaSyC7T47OiqsvTGsb6pA53q85rjy3KvZbvC8");
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
-
-    // 🎯 Contexto padrão Sympla Express
     const context = `
 Você é o Express Help AI, assistente interno do Sympla Express.
 Siga o formato: Resumo → Passo a passo → Erros comuns → Quando escalar → Fonte.
@@ -21,7 +18,6 @@ Se não souber, diga "Ainda não encontrei essa informação." e mostre o link p
 Use linguagem objetiva, empática e direta, ideal para operadores de bilheteria e suporte técnico.
 `;
 
-    // 🧩 Função para adicionar mensagens no chat
     function addMessage(text, sender) {
       const msg = document.createElement("div");
       msg.classList.add("message", sender);
@@ -30,7 +26,6 @@ Use linguagem objetiva, empática e direta, ideal para operadores de bilheteria 
       msg.scrollIntoView({ behavior: "smooth" });
     }
 
-    // 💬 Função principal
     async function ask() {
       const inputField = document.getElementById("question");
       const input = inputField.value.trim();
@@ -38,7 +33,7 @@ Use linguagem objetiva, empática e direta, ideal para operadores de bilheteria 
 
       addMessage(input, "user");
       inputField.value = "";
-      addMessage("💭 Processando...", "bot");
+      addMessage("💭 Aguarde que estou processando...", "bot");
 
       try {
         const result = await model.generateContent(context + "\n\nPergunta: " + input);
@@ -51,10 +46,10 @@ Use linguagem objetiva, empática e direta, ideal para operadores de bilheteria 
       }
     }
 
-    // 🌐 Expõe a função globalmente para o botão funcionar
+    // expõe a função globalmente para o botão funcionar
     window.ask = ask;
 
-    // 🔗 Função para abrir link de suporte
+    // Função para abrir link de suporte
     window.openSupport = () => {
       window.open(
         "https://ajuda.sympla.com.br/hc/pt-br/requests/new",
@@ -214,3 +209,4 @@ Use linguagem objetiva, empática e direta, ideal para operadores de bilheteria 
   </div>
 </body>
 </html>
+
