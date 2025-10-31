@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Express Help AI</title>
+  <script type="module">
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+
+    const genAI = new GoogleGenerativeAI("AIzaSyC7T47OiqsvTGsb6pA53q85rjy3KvZbvC8");
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+
+    async function ask() {
+      const input = document.getElementById("question").value;
+      const answerBox = document.getElementById("answer");
+      answerBox.textContent = "Pensando...";
+      const result = await model.generateContent(input);
+      answerBox.textContent = result.response.text();
+    }
+  </script>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
+    h2 { color: #6a1b9a; }
+    input { width: 80%; padding: 10px; border-radius: 8px; border: 1px solid #ccc; }
+    button { background-color: #6a1b9a; color: #fff; padding: 10px 16px; border: none; border-radius: 8px; margin-left: 5px; cursor: pointer; }
+    pre { background: #f7f7f7; padding: 15px; border-radius: 8px; margin-top: 15px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h2>💬 Express Help AI</h2>
+  <p>Pergunte sobre vendas, pagamentos, estornos e operação do Sympla Express.</p>
+  <input id="question" placeholder="Digite sua dúvida..." />
+  <button onclick="ask()">Enviar</button>
+  <pre id="answer"></pre>
+</body>
+</html>
