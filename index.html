@@ -9,19 +9,19 @@
   <script type="module">
     import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-    // Substitua pela sua API Key (restrita ao domínio github.io)
+    // 🔑 Substitua pela sua API Key (restrita ao domínio github.io)
     const genAI = new GoogleGenerativeAI("AIzaSyC7T47OiqsvTGsb6pA53q85rjy3KvZbvC8");
     const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
-    // Contexto de operação (mantém o tom e formato padrão)
+    // 🎯 Contexto padrão Sympla Express
     const context = `
 Você é o Express Help AI, assistente interno do Sympla Express.
 Siga o formato: Resumo → Passo a passo → Erros comuns → Quando escalar → Fonte.
 Se não souber, diga "Ainda não encontrei essa informação." e mostre o link para suporte.
-Use linguagem objetiva e cordial, ideal para operadores de bilheteria e suporte técnico.
+Use linguagem objetiva, empática e direta, ideal para operadores de bilheteria e suporte técnico.
 `;
 
-    // Cria uma bolha de mensagem no chat
+    // 🧩 Função para adicionar mensagens no chat
     function addMessage(text, sender) {
       const msg = document.createElement("div");
       msg.classList.add("message", sender);
@@ -30,7 +30,7 @@ Use linguagem objetiva e cordial, ideal para operadores de bilheteria e suporte 
       msg.scrollIntoView({ behavior: "smooth" });
     }
 
-    // Função principal: envia pergunta ao modelo e exibe resposta
+    // 💬 Função principal
     async function ask() {
       const inputField = document.getElementById("question");
       const input = inputField.value.trim();
@@ -38,7 +38,6 @@ Use linguagem objetiva e cordial, ideal para operadores de bilheteria e suporte 
 
       addMessage(input, "user");
       inputField.value = "";
-
       addMessage("💭 Processando...", "bot");
 
       try {
@@ -52,8 +51,16 @@ Use linguagem objetiva e cordial, ideal para operadores de bilheteria e suporte 
       }
     }
 
-    // Expõe a função globalmente para o botão funcionar
+    // 🌐 Expõe a função globalmente para o botão funcionar
     window.ask = ask;
+
+    // 🔗 Função para abrir link de suporte
+    window.openSupport = () => {
+      window.open(
+        "https://ajuda.sympla.com.br/hc/pt-br/requests/new",
+        "_blank"
+      );
+    };
   </script>
 
   <!-- Estilo visual -->
@@ -77,6 +84,25 @@ Use linguagem objetiva e cordial, ideal para operadores de bilheteria e suporte 
       font-size: 18px;
       text-align: left;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    #support-btn {
+      background: #ffffff;
+      color: #6a1b9a;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 12px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s ease;
+    }
+
+    #support-btn:hover {
+      background: #ece2f5;
     }
 
     #chat-container {
@@ -165,12 +191,20 @@ Use linguagem objetiva e cordial, ideal para operadores de bilheteria e suporte 
       input {
         font-size: 13px;
       }
+      #support-btn {
+        padding: 5px 10px;
+        font-size: 13px;
+      }
     }
   </style>
 </head>
 
 <body>
-  <header>💬 Express Help AI</header>
+  <header>
+    💬 Express Help AI
+    <button id="support-btn" onclick="openSupport()">Abrir chamado</button>
+  </header>
+
   <div id="chat-container">
     <div id="messages"></div>
     <div id="input-container">
