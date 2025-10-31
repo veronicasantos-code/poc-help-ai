@@ -3,29 +3,41 @@
 <head>
   <meta charset="UTF-8" />
   <title>Express Help AI</title>
-  <script type="module">
-  import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
+    <script type="module">
+    import { GoogleGenerativeAI } from "https://esm.run/@google/generative-ai";
 
-  const genAI = new GoogleGenerativeAI("AIzaSyC7T47OiqsvTGsb6pA53q85rjy3KvZbvC8");
-  const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
+    // Inicializa o modelo Gemini
+    const genAI = new GoogleGenerativeAI("AIzaSyC7T47OiqsvTGsb6pA53q85rjy3KvZbvC8");
+    const model = genAI.getGenerativeModel({ model: "gemini-2.5-pro" });
 
-  async function ask() {
-    const input = document.getElementById("question").value;
-    const answerBox = document.getElementById("answer");
-    answerBox.textContent = "💭 Processando...";
+    // Função principal do chat
+    async function ask() {
+      const input = document.getElementById("question").value.trim();
+      const answerBox = document.getElementById("answer");
 
-    const context = `
-Você é o Express Help AI, assistente interno do Sympla Express.
+      if (!input) {
+        answerBox.textContent = "⚠️ Digite uma pergunta antes de enviar.";
+        return;
+      }
+
+      answerBox.textContent = "💭 Processando...";
+
+      const context = `Você é o Express Help AI, assistente interno do Sympla Express.
 Siga o formato: Resumo → Passo a passo → Erros comuns → Quando escalar → Fonte.
 Se não souber, diga "Ainda não encontrei essa informação." e mostre o link para suporte.
 `;
+      try {
+        const result = await model.generateContent(context + "\n\nPergunta: " + input);
+        answerBox.textContent = result.response.text();
+      } catch (error) {
+        console.error(error);
+        answerBox.textContent = "❌ Ocorreu um erro ao processar sua solicitação.";
+      }
+    }
 
-    const result = await model.generateContent(context + "\n\nPergunta: " + input);
-    answerBox.textContent = result.response.text();
-  }
-
-  window.ask = ask;
-</script>
+    // Expõe a função globalmente (para o botão funcionar)
+    window.ask = ask;
+  </script>
   <style>
     body { font-family: Arial, sans-serif; margin: 40px; color: #333; }
     h2 { color: #6a1b9a; }
@@ -42,5 +54,6 @@ Se não souber, diga "Ainda não encontrei essa informação." e mostre o link p
   <pre id="answer"></pre>
 </body>
 </html>
+
 
 
